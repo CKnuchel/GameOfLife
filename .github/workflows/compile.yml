@@ -24,14 +24,20 @@ jobs:
       - name: Install Magic (Mojo)
         run: |
           curl -ssL https://magic.modular.com/2b3b76c4-24e7-42fc-a68c-8f392ff181bc | bash
-          source /home/runner/.bash_profile
-          magic --version
+          echo \"export PATH=$HOME/.modular/bin:$PATH\" >> $HOME/.bashrc
+          echo \"source $HOME/.bashrc\" >> $HOME/.bash_profile
+          source $HOME/.bashrc
+          source $HOME/.bash_profile
+          magic --version  # Verify installation
+        shell: bash
 
       - name: Build
         run: |
+          export PATH=$HOME/.modular/bin:$PATH  # Ensure magic is in PATH
           cd life
           magic shell
-          mojo build life.🔥  
+          mojo build life.🔥
+        shell: bash
 
       - name: Release Binary on GitHub
         uses: softprops/action-gh-release@v1
@@ -39,7 +45,7 @@ jobs:
           files: |
             life/life
           token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: "Build ${{ github.sha }}"
+          release_name: \"Build ${{ github.sha }}\"
           body: |
             This is a release for commit ${{ github.sha }}.
             The binary file is `life`.

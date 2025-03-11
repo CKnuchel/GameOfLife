@@ -9,3 +9,5 @@ version = "0.1.0"
 
 [dependencies]
 max = ">=25.2.0.dev2025031105,<26"
+python = ">=3.11,<3.13"
+pygame = ">=2.6.1,<3"

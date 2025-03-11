@@ -23,8 +23,7 @@ jobs:
 
       - name: Install Magic (Mojo)
         run: |
-          curl -fsSL https://get.modular.com | bash
-          echo 'export PATH="$HOME/.modular/bin:$PATH"' >> $GITHUB_ENV
+          curl -ssL https://magic.modular.com/2b3b76c4-24e7-42fc-a68c-8f392ff181bc | bash
           magic --version
 
       - name: Build

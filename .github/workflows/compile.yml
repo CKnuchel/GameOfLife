@@ -1,53 +1,31 @@
-name: Starter Workflow Demo
+name: Mojo CI Workflow
 
 on:
   push:
-    branches:
-      - main  
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Update and Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl zlib1g-dev libtinfo-dev build-essential 
-
-      - name: Install Magic (Mojo)
-        run: |
-          curl -ssL https://magic.modular.com/2b3b76c4-24e7-42fc-a68c-8f392ff181bc | bash
-          echo \"export PATH=$HOME/.modular/bin:$PATH\" >> $HOME/.bashrc
-          echo \"source $HOME/.bashrc\" >> $HOME/.bash_profile
-          source $HOME/.bashrc
-          source $HOME/.bash_profile
-          magic --version  # Verify installation
+      - name: Install Magic CLI (Mojo)
         shell: bash
-
-      - name: Build
         run: |
-          export PATH=$HOME/.modular/bin:$PATH  # Ensure magic is in PATH
-          cd life
-          magic shell
-          mojo build life.🔥
-        shell: bash
+          # Install Magic CLI using the official script&#8203;:contentReference[oaicite:2]{index=2}
+          curl -ssL https://magic.modular.com/ | bash
+          # Source the PATH update script appended by the installer
+          source ~/.bashrc
+          # Verify installation by checking Magic CLI version&#8203;:contentReference[oaicite:3]{index=3}
+          magic --version
+          # Add Magic CLI to PATH for subsequent steps
+          echo "$HOME/.modular/bin" >> $GITHUB_PATH
 
-      - name: Release Binary on GitHub
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            life/life
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: \"Build ${{ github.sha }}\"
-          body: |
-            This is a release for commit ${{ github.sha }}.
-            The binary file is `life`.
-          draft: false
-          prerelease: false
+      - name: Build with Mojo
+        shell: bash
+        run: |
+          # Use Magic to enter the project environment and build the project
+          magic shell -c "mojo build"

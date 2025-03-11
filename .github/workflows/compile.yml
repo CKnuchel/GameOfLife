@@ -1,11 +1,11 @@
-name: Compile Mojo
+name: Starter Workflow Demo
 
 on:
   push:
-    branches: 
-      - main
+    branches:
+      - main  
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
@@ -18,8 +18,8 @@ jobs:
 
       - name: Update and Install Dependencies
         run: |
-          apt-get update
-          apt-get install -y curl zlib1g-dev libtinfo-dev build-essential 
+          sudo apt-get update
+          sudo apt-get install -y curl zlib1g-dev libtinfo-dev build-essential 
 
       - name: Install Magic (Mojo)
         run: |
@@ -30,13 +30,13 @@ jobs:
       - name: Build
         run: |
           cd life
-          mojo build life.🔥
+          mojo build life.mojo  
 
       - name: Release Binary on GitHub
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            life/life.🔥
+            life/life
           token: ${{ secrets.GITHUB_TOKEN }}
           release_name: "Build ${{ github.sha }}"
           body: |

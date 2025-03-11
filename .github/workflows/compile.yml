@@ -30,7 +30,8 @@ jobs:
       - name: Build
         run: |
           cd life
-          mojo build life.mojo  
+          magic shell
+          mojo build life.🔥  
 
       - name: Release Binary on GitHub
         uses: softprops/action-gh-release@v1

@@ -1,1 +1,45 @@
+name: Starter Workflow Demo
 
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update and Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl zlib1g-dev libtinfo-dev build-essential 
+
+      - name: Install Magic (Mojo)
+        run: |
+          curl -ssL https://magic.modular.com/2b3b76c4-24e7-42fc-a68c-8f392ff181bc | bash
+          source ~/.bashrc
+          magic run mojo --version
+
+      - name: Build
+        run: |
+          magic shell
+          cd life
+          mojo build life.🔥  
+
+      - name: Release Binary on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            life/life.🔥
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release_name: ${{ github.sha }}
+          body: |
+            This is a release for commit ${{ github.sha }}.
+            It was created by the GitHub Actions workflow.
+            The binary is the life.🔥 file.
+          draft: false
+          prerelease: false
